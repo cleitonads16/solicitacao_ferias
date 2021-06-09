@@ -1,0 +1,247 @@
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css"/>
+	<link type="text/css" rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+	<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/webdesk/vcXMLRPC.js"></script>
+	<script type="text/javascript" src="jquery.mask.min.js"></script>
+</head>
+<body>
+<div class="fluig-style-guide">
+<form name="form" role="form">
+	<input id="atividade" name="atividade" type="hidden"/>
+	<input id="usuarioAtual" name="usuarioAtual" type="hidden"/>
+	<input id="sol_txt_login" name="sol_txt_login" type="hidden"/>
+	<input id="loginUsuario" name="loginUsuario" type="hidden"/>
+	
+	<!-- CAMPOS RETORNADOS DA API FLUIG USUER LOGADO -->
+	<input type="hidden" name="rtApiFluigRetUserLogin" id="rtApiFluigRetUserLogin" />
+	<input type="hidden" name="rtApiFluigRetUserFullNm" id="rtApiFluigRetUserFullNm" />
+	<input type="hidden" name="rtApiFluigRetUserIdpId" id="rtApiFluigRetUserIdpId" />
+	
+	<!-- CAMPOS RETORNADOS DO PROTHEUS -->
+	<input type="hidden" name="sol_txt_area" id="sol_txt_area" />
+	<input type="hidden" name="sol_txt_localRecurso" id="sol_txt_localRecurso" />
+	<div class="div_titulo">
+		<div class="page-header">
+			<h1>Solicita&ccedil;&atilde;o de F&eacute;rias</h1>
+			<small>TSM e TSUL</small>
+		</div>
+	</div>
+	<div id="solicitante">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<label class="sol_titulo" data-toggle="collapse" data-target="#collapseSol" data-parent="#solicitante" style="font-size: 13pt">Solicitante</label>
+				</h3>
+			</div>
+			<div id="collapseSol" class="panel-collapse collapse in">
+				<div class="panel-body">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-6">
+								<label class="control-label">Nome:</label>
+								<input type="text" name="sol_txt_nome" id="sol_txt_nome" class="form-control" readonly> 
+							</div>
+							<div class="col-md-2">
+								<label class="control-label">Data:</label>
+								<input type="text" name="sol_txt_dt" id="sol_txt_dt" class="form-control" placeholder="dia/mes/ano">
+							</div>
+							<div class="col-md-2">
+								<label class="control-label">C&oacute;digo Recurso:</label>
+								<input type="text" name="sol_txt_codigo" id="sol_txt_codigo" class="form-control" readonly>
+							</div>
+							<div class=" col-md-2">
+								<label for="unidade"> Selecione a Unidade </label> 
+								<select name="sol_selc_unidade" id="sol_selc_unidade" class="form-control">
+									<option value="selecione">SELECIONE</option>
+									<option value="TSM">Serra do Mar</option>
+									<option value="TSUL">Sul Minas</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row space">
+						<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+							<label class="control-label">In&iacute;cio do per&iacute;odo de f&eacute;rias:</label>
+							<div class='input-group'>
+								<span class="input-group-addon noprint" id="calendario">
+									<span class="fluigicon fluigicon-calendar" data-toggle="tooltip" data-placement="top" title="Clique para selecionar a data in&iacute;cio"></span>
+								</span>
+								<input onblur="comparaDatas();" type="text" name="sol_txt_dtIni" id="sol_txt_dtIni" class="form-control date" placeholder="dia/mes/ano">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+							<label class="control-label" >T&eacute;rmino:</label>
+							<div class='input-group'>
+								<span class="input-group-addon calendario noprint">
+									<span class="fluigicon fluigicon-calendar" data-toggle="tooltip" data-placement="top" title="Clique para selecionar a data t&eacute;rmino"></span>
+								</span>
+								<input onblur="comparaDatas();" type="text" name="sol_txt_dtTerm" id="sol_txt_dtTerm" class="form-control date" placeholder="dia/mes/ano">
+							</div>
+						</div>
+					</div>
+					<div class="row space">
+						<label class="col-md-12 control-label" style="margin-bottom: 10px;">Selecione o tipo de contrata&ccedil;&atilde;o:</label>
+						<div class="div_margin">
+							<label class="radio-inline"> 
+								<input type="radio" name="sol_rd_tipoContr" id="sol_rd_tipoContrPj" value="pj">PJ
+							</label>
+							<label class="radio-inline"> 
+								<input type="radio" name="sol_rd_tipoContr" id="sol_rd_tipoContrClt" value="clt">CLT
+							</label>
+							<label class="radio-inline"> 
+								<input type="radio" name="sol_rd_tipoContr" id="sol_rd_tipoContrCoop" value="coop">COOP
+							</label>
+						</div>
+					</div>
+					<div id="div_solObs" class="space">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<label class="labelSolObs">Observa&ccedil;&otilde;es</label>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="form-group col-md-12">
+										<textarea name="sol_txtArea_obs" id="sol_txtArea_obs" rows="3" class="form-control"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="gerencia">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<label class="gerencia_titulo" data-toggle="collapse" data-target="#collapseGerencia" data-parent="#gerencia" style="font-size: 13pt">Aprova&ccedil;&atilde;o Ger&ecirc;ncia</label>
+				</h3>
+			</div>
+			<div id="collapseGerencia" class="panel-collapse collapse">
+				<div class="panel-body">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+								<label class="control-label">Nome:</label>
+								<input type="text" name="gere_txt_nome" id="gere_txt_nome" class="form-control gere_txt_nome" placeholder="Nome do Solicitante"> 
+							</div>
+							<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+								<label class="control-label">Data:</label>
+								<input type="text" name="gere_txt_dt" id="gere_txt_dt" class="form-control" placeholder="dia/mes/ano">
+							</div>
+					    </div>
+					</div>
+					<div class="div_clonado space"></div>
+					<div class="div_checkCoord space">
+						<label for="checkCoord">
+							<input type="checkbox" name="ger_chk_coord" id="ger_chk_coord"/> Ciente da decis&atilde;o dos coordenadores.
+						</label>
+					</div>
+					<div class="row space">
+						<label class="col-md-12 control-label" style="margin-bottom: 10px;">Per&iacute;odo de f&eacute;rias Aprovado?</label>
+						<div class="div_margin">
+							<label class="radio-inline"> 
+								<input type="radio" name="gere_rd_aprov" id="gere_rd_aprovSim" class="gere_rd_aprov" value="sim">Sim
+							</label>
+							<label class="radio-inline"> 
+								<input type="radio" name="gere_rd_aprov" id="gere_rd_aprovNao" class="gere_rd_aprov" value="nao">N&atilde;o; Devolver ao solicitante
+							</label>
+						</div>
+					</div>
+					<div id="div_justGer" class="space">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<label class="labelJustGer">Observa&ccedil;&otilde;es</label>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="form-group col-md-12">
+										<textarea name="gere_txtArea_just" id="gere_txtArea_just" rows="3" class="form-control"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="coordenacao">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<label class="data_titulo" data-toggle="collapse" data-target="#collapseDatas" data-parent="#coordenacao" style="font-size: 13pt">Aprova&ccedil;&atilde;o Coordena&ccedil;&atilde;o</label>
+				</h3>
+			</div>
+			<div id="collapseDatas" class="panel-collapse collapse">
+				<div class="panel-body">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+								<label class="control-label">Nome:</label>
+								<input type="text" name="coord_txt_nome" id="coord_txt_nome" class="form-control coord_txt_nome" placeholder="Nome do Solicitante"> 
+							</div>
+							<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+								<label class="control-label">Data:</label>
+								<input type="text" name="coord_txt_dt" id="coord_txt_dt" class="form-control" placeholder="dia/mes/ano">
+							</div>
+						</div>
+					</div>
+					<div class="div_clone">
+						<table class="table table-bordered" tablename="tb_coordenacao" id="tb_coordenacao" noaddbutton="true" nodeletebutton="true">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Nome do Coordenador</th>
+									<th>Per&iacute;odo de f&eacute;rias Aprovado?</th>
+									<th>Observa&ccedil;&otilde;es</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<div class="divBtTb">
+											<button name="btn_excluir" type="button" id="btn_excluir" class="btn btn-primary btn-xs" onclick="removTb(this);">Excluir</button>
+										</div>
+									</td>
+									<td style="width: 450px;">
+										<input name="tab_txt_nome" type="text" id="tab_txt_nome" class="form-control tabNome" size="4" placeholder="Digite o nome do coordenador"/>
+									</td>
+									<td> 
+										<div class="div_margTb">
+											<label class="radio-inline"> 
+												<input type="radio" name="coord_rd_autorz" id="coord_rd_autorzSim" class="coord_rd_autorz" value="sim">Sim
+											</label>
+											<label class="radio-inline"> 
+												<input type="radio" name="coord_rd_autorz" id="coord_rd_autorzNao" class="coord_rd_autorz" value="nao">N&atilde;o
+											</label>
+										</div>
+									</td>
+									<td style="width: 550px;">
+										<textarea name="tab_txtArea_obs" id="tab_txtArea_obs" class="form-control" rows="2" size="4" placeholder="Em caso de reprova&ccedil;&atilde;o este campo ser&aacute; obrigat&oacute;rio" ></textarea>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-4">
+							<button type="button" name="add_btn_tbCoord" id="add_btn_tbCoord" class="btn btn-primary">Adicionar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+</div>
+<script src="solicitacao_ferias.js"></script>
+<!-- <script type="text/javascript"></script>-->
+</body>
+</html>
